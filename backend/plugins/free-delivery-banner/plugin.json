@@ -1,0 +1,8 @@
+{
+    "id": "free-delivery-banner",
+    "name": "Free Delivery Banner",
+    "version": "1.0.0",
+    "description": "Adds a storefront announcement through the home.announcement filter and logs order placement events.",
+    "author": "BD Marketplace",
+    "class": "Plugins\\FreeDeliveryBanner\\Plugin"
+}

@@ -1,0 +1,307 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    @apply bg-slate-50 text-ink antialiased;
+    font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  }
+  h1, h2, h3, h4 {
+    @apply font-semibold tracking-tight;
+    font-family: var(--font-heading, var(--font-body, 'Inter', system-ui, sans-serif));
+  }
+  ::selection { @apply bg-brand-200 text-brand-900; }
+}
+
+@layer components {
+  .container-page { @apply mx-auto w-full max-w-7xl px-3 sm:px-4 lg:px-6; }
+  .input { @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-ink shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100 disabled:bg-slate-100; }
+  .label { @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-600; }
+  .card { @apply rounded-xl border border-slate-200 bg-white shadow-card; }
+  .link { @apply text-brand-600 hover:text-brand-700 hover:underline; }
+  .table-wrap { @apply w-full overflow-x-auto; }
+  .table { @apply w-full min-w-[640px] border-collapse text-sm; }
+  .table th { @apply border-b border-slate-200 bg-slate-50 px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-500; }
+  .table td { @apply border-b border-slate-100 px-3 py-3 align-middle text-slate-700; }
+  .table tbody tr:hover { @apply bg-slate-50/70; }
+}
+
+/* Administrator-controlled layout tokens. */
+.container-page { max-width: var(--content-width, 80rem); }
+.card { border-radius: var(--radius-card, 12px); }
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .product-grid { gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 768px) {
+  .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .product-grid { grid-template-columns: repeat(var(--product-cols, 4), minmax(0, 1fr)); }
+}
+
+/* Smooth, touch-friendly focus and tap states. */
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+@media (hover: none) {
+  .product-card-actions { opacity: 1 !important; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/*
+ * Keep text on the administrator's brand colour readable. After a custom
+ * primary colour is applied, --brand-contrast is black for light colours and
+ * white for dark ones. These selectors have higher specificity than the
+ * single-class Tailwind utilities they refine.
+ */
+.bg-brand-500.text-white,
+.bg-brand-600.text-white,
+.bg-brand-500 .text-white,
+.bg-brand-600 .text-white {
+  color: rgb(var(--brand-contrast, 255 255 255));
+}
+
+/* ==========================================================================
+   Storefront — a Daraz-inspired shopping experience
+   The admin-selected brand colour drives the header, prices, and accents.
+   ========================================================================== */
+
+.store-shell { background: #f5f5f5; }
+
+.store-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #ececec;
+  color: #6b7280;
+}
+
+.store-header {
+  background: rgb(var(--brand-500, 248 86 6));
+  color: rgb(var(--brand-contrast, 255 255 255));
+}
+
+.store-search-shell {
+  display: flex;
+  height: 2.5rem;
+  overflow: hidden;
+  border-radius: 0.375rem;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.store-search-shell input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  padding: 0 0.75rem;
+  font-size: 0.8125rem;
+  color: #1f2937;
+  outline: none;
+  background: transparent;
+}
+
+.store-search-shell input::placeholder { color: #9ca3af; }
+
+.store-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0 1.1rem;
+  background: rgb(var(--brand-600, 229 69 0));
+  color: rgb(var(--brand-contrast, 255 255 255));
+  font-size: 0.8125rem;
+  font-weight: 700;
+  transition: filter 160ms ease;
+}
+
+.store-search-btn:hover { filter: brightness(0.94); }
+
+.store-catnav {
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.store-nav-link {
+  display: inline-flex;
+  align-items: center;
+  height: 2.5rem;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  color: #4b5563;
+  transition: color 150ms ease;
+}
+
+.store-nav-link:hover { color: rgb(var(--brand-600, 229 69 0)); }
+
+.store-nav-hot {
+  color: rgb(var(--brand-600, 229 69 0));
+  font-weight: 700;
+}
+
+.dz-card {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.dz-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+.dz-discount {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-bottom-right-radius: 0.5rem;
+  background: rgb(var(--brand-500, 248 86 6));
+  padding: 0.2rem 0.45rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: rgb(var(--brand-contrast, 255 255 255));
+}
+
+.dz-section {
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04);
+}
+
+.dz-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding: 0.75rem 1rem;
+}
+
+.dz-flash-head {
+  background: linear-gradient(100deg, rgb(var(--brand-600, 229 69 0)) 0%, rgb(var(--brand-400, 255 112 56)) 60%, #ffb347 100%);
+  color: #fff;
+}
+
+.dz-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.dz-countdown span {
+  min-width: 1.75rem;
+  border-radius: 0.25rem;
+  background: rgba(17, 24, 39, 0.82);
+  padding: 0.15rem 0.25rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.dz-scroll-x {
+  display: flex;
+  gap: 0.625rem;
+  overflow-x: auto;
+  padding: 0.75rem 1rem 1rem;
+  scroll-snap-type: x proximity;
+}
+
+.dz-scroll-x > * { scroll-snap-align: start; }
+
+.dz-cat-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.dz-cat-circle > span:first-child {
+  display: flex;
+  height: 3.5rem;
+  width: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-size: 1.4rem;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.05);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.dz-cat-circle:hover > span:first-child {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 18px -10px rgba(15, 23, 42, 0.4), inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+.dz-progress {
+  height: 0.375rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: #fee2d5;
+}
+
+.dz-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, rgb(var(--brand-500, 248 86 6)), #ffb347);
+}
+
+.dz-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4b5563;
+  transition: all 150ms ease;
+}
+
+.dz-chip:hover { border-color: rgb(var(--brand-300, 255 162 116)); color: rgb(var(--brand-600, 229 69 0)); }
+
+.dz-chip-active {
+  border-color: rgb(var(--brand-500, 248 86 6));
+  background: rgb(var(--brand-50, 255 245 239));
+  color: rgb(var(--brand-700, 189 51 2));
+}
+
+.dz-payment-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.25rem;
+  background: #fff;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+.dz-fade-in { animation: dzFade 260ms ease both; }
+
+@keyframes dzFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .dz-cat-circle > span:first-child { height: 3rem; width: 3rem; font-size: 1.2rem; }
+}

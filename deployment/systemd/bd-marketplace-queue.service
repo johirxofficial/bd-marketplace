@@ -1,0 +1,28 @@
+[Unit]
+Description=BD Marketplace queue worker
+Documentation=file:///var/www/bd-marketplace/docs/OPERATIONS.md
+After=network-online.target mysql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=5
+WorkingDirectory=/var/www/bd-marketplace/backend
+ExecStart=/usr/bin/php artisan queue:work --sleep=3 --tries=3 --max-time=3600 --no-interaction
+KillSignal=SIGTERM
+TimeoutStopSec=30
+StandardOutput=append:/var/www/bd-marketplace/backend/storage/logs/queue.log
+StandardError=append:/var/www/bd-marketplace/backend/storage/logs/queue.log
+
+# Basic hardening: the worker only needs the application directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/www/bd-marketplace/backend/storage /var/www/bd-marketplace/backend/bootstrap/cache
+
+[Install]
+WantedBy=multi-user.target

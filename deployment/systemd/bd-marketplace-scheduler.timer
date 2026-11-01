@@ -1,0 +1,12 @@
+[Unit]
+Description=Run the BD Marketplace scheduler every minute
+Documentation=file:///var/www/bd-marketplace/docs/OPERATIONS.md
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+AccuracySec=15s
+Persistent=false
+Unit=bd-marketplace-scheduler.service
+
+[Install]
+WantedBy=timers.target

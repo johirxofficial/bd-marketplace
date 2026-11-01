@@ -1,0 +1,51 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+.install-credentials
+.admin-credentials
+.demo-credentials
+.db-credentials
+*.pem
+*.key
+
+# PHP dependencies and build artifacts
+backend/vendor/
+backend/bootstrap/cache/*.php
+backend/storage/*.key
+backend/public/storage
+backend/public/hot
+backend/public/build
+
+# Runtime files (keep directory placeholders)
+backend/storage/logs/*
+!backend/storage/logs/.gitignore
+backend/storage/framework/cache/data/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/app/uploads/*
+!backend/storage/app/uploads/.gitignore
+backend/database/*.sqlite
+backend/.phpunit.result.cache
+.phpunit.result.cache
+
+# Frontend dependencies and output
+frontend/node_modules/
+frontend/tsconfig.tsbuildinfo
+
+# Generated SPA build (rebuild with `npm run build`)
+backend/public/app/
+
+# Backups, packages, and local temp files
+backups/
+dist/
+*.tar.gz
+*.zip
+*.log
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp

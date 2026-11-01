@@ -1,0 +1,18 @@
+[Unit]
+Description=BD Marketplace scheduler (runs Laravel schedule:run every minute)
+Documentation=file:///var/www/bd-marketplace/docs/OPERATIONS.md
+After=network-online.target mysql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/bd-marketplace/backend
+ExecStart=/usr/bin/php artisan schedule:run --no-interaction
+TimeoutStartSec=120
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/www/bd-marketplace/backend/storage /var/www/bd-marketplace/backend/bootstrap/cache
