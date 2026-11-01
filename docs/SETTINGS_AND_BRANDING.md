@@ -19,11 +19,24 @@ Platform settings are stored in `platform_settings` (`key`, `value`, `type`, `gr
 `support_phone`, `support_email`, `support_hours`, `support_address`, `whatsapp_number`, `facebook_url`, `instagram_url`, `youtube_url`, `tiktok_url`, `linkedin_url`.
 
 ### Appearance
-| Key | Notes |
-| --- | --- |
-| `primary_color` | Hex colour; generates the Tailwind `brand-50`…`brand-900` palette at runtime |
-| `secondary_color` | Hex colour for the announcement bar |
-| `currency_symbol` | Default `৳` |
+| Key | Default | Notes |
+| --- | --- | --- |
+| `primary_color` | `#f85606` | Hex colour; generates the Tailwind `brand-50`…`brand-900` palette at runtime. Drives the marketplace header, prices, badges, and buttons |
+| `secondary_color` | `#1f2937` | Hex colour for the announcement bar and dark accents |
+| `currency_symbol` | `৳` | Price prefix across the storefront |
+| `font_family` | `inter` | Body font (`inter`, `dm-sans`, `manrope`, `plus-jakarta`, `sora`) |
+| `heading_font_family` | `inter` | Heading font; falls back to `font_family` |
+| `font_scale` | `1` | Global text scale multiplier |
+| `content_width` | `wide` | `narrow`, `normal`, or `wide` container width |
+| `card_radius` | `lg` | Corner radius for cards and panels |
+| `product_columns` | `5` | Storefront product grid columns on desktop (2–6) |
+| `sticky_header` | `1` | Keep the storefront header pinned while scrolling |
+| `show_announcement` | `1` | Show the utility/announcement strip |
+| `newsletter_enabled` | `1` | Show the footer newsletter block |
+| `newsletter_title`, `newsletter_text` | — | Newsletter copy |
+
+These are applied at runtime by `frontend/src/lib/settings.ts` (`applyAppearance()`), so
+branding and layout changes take effect without rebuilding the SPA.
 
 ### Commerce
 `cod_enabled`, `tax_enabled`, `tax_percent`, `min_order_amount`, `free_shipping_note`, `order_prefix`, `return_policy`.
@@ -67,7 +80,43 @@ The storefront does **not** use hard-coded brand colours:
 5. `secondary_color` is applied inline to the announcement bar.
 6. The palette is applied by both the storefront layout and the admin/seller portal layout, including on a full page reload.
 
-Example: at the time of writing, staging uses `primary_color=#ff0000` and `secondary_color=#145bff`, so the storefront buttons, badges, links, and search are red and the announcement bar is blue. Administrators can change these at any time in **Admin → Settings → Appearance**; treat the values shown in the UI as authoritative rather than this document.
+Example: the shipped defaults are `primary_color=#f85606` and `secondary_color=#1f2937`, which produce the Daraz-style orange marketplace header, orange price text, orange badges, and a dark announcement strip. Administrators can change these at any time in **Admin → Settings → Appearance**; treat the values shown in the UI as authoritative rather than this document.
+
+## Storefront design system (Daraz-inspired)
+
+The customer-facing shop uses a marketplace layout rather than a generic storefront:
+
+- **Orange header** (`.store-header`) with the logo, search bar and category selector,
+  wishlist/messages/alerts/cart shortcuts, and an account dropdown.
+- **Utility strip** (`.store-topbar`) with help, order tracking, seller signup, and login links.
+- **Category navigation** (`.store-catnav`) with an "All Categories" mega menu.
+- **Hero carousel** with side promo cards, dots, and arrow controls.
+- **Circular category strip** (`.dz-cat-circle`) for the top eight departments.
+- **Flash-sale rail** (`.dz-flash-head`, `.dz-countdown`, `.dz-progress`) with a live
+  countdown and sold/stock progress bars.
+- **"Just For You" feed** with Featured / New arrivals / Best sellers tabs and load-more.
+- **Product cards** (`.dz-card`, `.dz-discount`) with a discount corner badge, compact BDT
+  price, strike-through compare price, rating stars, sold count, and a COD tag.
+- **Listing page** with breadcrumb, result bar, sort dropdown, filter rail, active filter
+  chips, and pagination.
+
+Tokens live in `frontend/src/index.css`:
+
+| Token / class | Purpose |
+| --- | --- |
+| `--brand-50` … `--brand-900` | RGB channels generated from `primary_color` |
+| `--brand-contrast` | Readable text colour on brand backgrounds |
+| `.store-shell` | Page background (`#f5f5f5`) |
+| `.store-header`, `.store-topbar`, `.store-catnav` | Header bands |
+| `.store-search-shell`, `.store-search-btn` | Search bar |
+| `.dz-card`, `.dz-discount` | Product card and discount badge |
+| `.dz-section`, `.dz-section-head` | White content panels |
+| `.dz-flash-head`, `.dz-countdown`, `.dz-progress` | Flash sale |
+| `.dz-chip`, `.dz-chip-active` | Tabs and filter chips |
+| `.dz-payment-badge` | bKash/Nagad/Rocket/QR/COD badges |
+
+Product grid density comes from the `product-grid` utility in
+`frontend/tailwind.config.js`, which respects `product_columns`.
 
 If a colour is invalid, the previous/default palette remains. Changing a colour takes effect for users on their next settings fetch (React Query caches it for 10 minutes).
 
